@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Luminous Path｜婚活タイプ診断</title>
+
+  <style>
+    :root {
+      --navy: #34465c;
+      --blue: #8caec4;
+      --pink: #d9a9b8;
+      --cream: #fbf9f5;
+      --text: #424b55;
+      --muted: #7d8790;
+      --border: #e9e5df;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--text);
+      font-family:
+        -apple-system, BlinkMacSystemFont, "Noto Sans JP",
+        "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+      line-height: 1.8;
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .page {
+      width: min(100% - 28px, 560px);
+      margin: 0 auto;
+      padding: 30px 0 48px;
+    }
+
+    .brand {
+      text-align: center;
+      color: var(--navy);
+      font-family: Georgia, serif;
+      font-size: 19px;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+    }
+
+    .brand small {
+      display: block;
+      font-family: sans-serif;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--muted);
+    }
+
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px 22px;
+      box-shadow: 0 5px 24px rgba(52, 70, 92, 0.045);
+    }
+
+    .eyebrow {
+      color: #9b8290;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    h1, h2, h3, p {
+      margin-top: 0;
+    }
+
+    h1 {
+      color: var(--navy);
+      font-size: 25px;
+      line-height: 1.5;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    h2 {
+      color: var(--navy);
+      font-size: 21px;
+      line-height: 1.55;
+      margin-bottom: 14px;
+    }
+
+    .intro {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .note {
+      background: #f7f5f1;
+      border-radius: 12px;
+      padding: 13px 15px;
+      color: #737c83;
+      font-size: 12px;
+      margin: 20px 0;
+    }
+
+    .primary {
+      display: block;
+      width: 100%;
+      border: 0;
+      border-radius: 30px;
+      padding: 14px 18px;
+      color: white;
+      background: var(--navy);
+      font-weight: 600;
+      margin-top: 18px;
+    }
+
+    .primary:active {
+      opacity: .85;
+    }
+
+    .secondary {
+      display: block;
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 12px 18px;
+      color: var(--navy);
+      background: white;
+      margin-top: 12px;
+    }
+
+    .choice {
+      display: block;
+      width: 100%;
+      text-align: left;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 14px 15px;
+      margin: 10px 0;
+      color: var(--text);
+      transition: .15s;
+    }
+
+    .choice:hover {
+      border-color: var(--blue);
+      background: #f8fbfc;
+    }
+
+    .choice:active {
+      background: #eef5f8;
+    }
+
+    .choice-letter {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 27px;
+      height: 27px;
+      border-radius: 50%;
+      background: #edf2f5;
+      color: var(--navy);
+      font-size: 13px;
+      font-weight: bold;
+      margin-right: 9px;
+      vertical-align: middle;
+    }
+
+    .progress-area {
+      margin-bottom: 22px;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .progress-track {
+      height: 6px;
+      border-radius: 10px;
+      background: #eeeae5;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--blue), var(--pink));
+      transition: width .2s;
+    }
+
+    .question {
+      font-size: 19px;
+      color: var(--navy);
+      font-weight: 600;
+      line-height: 1.65;
+      margin-bottom: 22px;
+    }
+
+    .result-label {
+      text-align: center;
+      color: #9b8290;
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .result-title {
+      text-align: center;
+      font-size: 24px;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .catchcopy {
+      text-align: center;
+      color: #9b7183;
+      font-weight: 600;
+      margin: 12px 0 22px;
+    }
+
+    .result-section {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      margin-top: 18px;
+    }
+
+    .result-section h3 {
+      color: var(--navy);
+      font-size: 15px;
+      margin-bottom: 7px;
+    }
+
+    .result-section p {
+      font-size: 14px;
+      color: #626d76;
+      margin-bottom: 0;
+    }
+
+    .consult-box {
+      background: #f7f4f1;
+      border-radius: 14px;
+      padding: 19px 16px;
+      margin-top: 25px;
+      text-align: center;
+    }
+
+    .consult-box h3 {
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+
+    .consult-box p {
+      font-size: 13px;
+      color: #68737b;
+      margin-bottom: 12px;
+    }
+
+    .small {
+      font-size: 11px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 380px) {
+      .panel {
+        padding: 24px 17px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+      .question {
+        font-size: 17px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <div class="brand">
+      Luminous Path
+      <small>YOUR MARRIAGE STYLE</small>
+    </div>
+
+    <!-- スタート画面 -->
+    <section id="startScreen" class="panel">
+      <div class="eyebrow">SPECIAL DIAGNOSIS</div>
+      <h1>あなたの婚活タイプを<br>診断してみませんか？</h1>
+      <p class="intro">
+        いくつかの質問に答えるだけで、<br>
+        あなたに合った婚活の進め方が見えてきます。
+      </p>
+
+      <div class="note">
+        正解・不正解はありません。今の気持ちに一番近いものを選んでください。
+      </div>
+
+      <h2 style="font-size:17px;">誰について診断しますか？</h2>
+
+      <button class="choice" onclick="startQuiz('self')">
+        <span class="choice-letter">1</span>
+        自分自身について診断する
+      </button>
+
+      <button class="choice" onclick="startQuiz('parent')">
+        <span class="choice-letter">2</span>
+        お子さまについて考えながら診断する
+      </button>
+
+      <p class="small">
+        診断結果は、回答内容をもとにした参考情報です。
+      </p>
+    </section>
+
+    <!-- 質問画面 -->
+    <section id="quizScreen" class="panel hidden">
+      <div class="progress-area">
+        <div class="progress-label">
+          <span id="targetLabel">本人向け診断</span>
+          <span id="progressText">1 / 7</span>
+        </div>
+        <div class="progress-track">
+          <div id="progressBar" class="progress-bar"></div>
+        </div>
+      </div>
+
+      <div class="eyebrow">QUESTION</div>
+      <div id="questionText" class="question"></div>
+      <div id="choices"></div>
+
+      <button class="secondary" id="backButton" onclick="goBack()">
+        前の質問に戻る
+      </button>
+    </section>
+
+    <!-- 結果画面 -->
+    <section id="resultScreen" class="panel hidden">
+      <div class="result-label">YOUR DIAGNOSIS RESULT</div>
+      <h1 style="font-size:20px;">あなたの診断結果は...</h1>
+      <div id="resultTitle" class="result-title"></div>
+      <div id="resultCatchcopy" class="catchcopy"></div>
+
+      <div class="result-section">
+        <h3>あなたの傾向</h3>
+        <p id="resultDescription"></p>
+      </div>
+
+      <div class="result-section">
+        <h3>婚活で大切にしたいこと</h3>
+        <p id="resultAdvice"></p>
+      </div>
+
+      <div class="result-section">
+        <h3>おすすめの進め方</h3>
+        <p id="resultMethod"></p>
+      </div>
+
+      <div id="parentNotice" class="note hidden"></div>
+
+      <div class="consult-box">
+        <h3>あなたに合った婚活を、一緒に考えませんか？</h3>
+        <p>
+          Luminous Pathでは、一人ひとりのお気持ちや状況に合わせて、
+          婚活の進め方をご提案しています。
+          まだ入会を決めていない方も、お気軽にご相談ください。
+        </p>
+        <button class="primary" onclick="openConsultation()">
+          LINEで無料相談する
+        </button>
+      </div>
+
+      <button class="secondary" onclick="restartQuiz()">
+        もう一度診断する
+      </button>
+
+      <p class="small">
+        この診断は、婚活の進め方を考えるための参考情報です。
+        将来や相性を断定するものではありません。
+      </p>
+    </section>
+
+  </main>
+
+  <script>
+    /*
+     * ここにLuminous PathのLINE公式アカウントURLを設定します。
+     * 例：https://lin.ee/xxxxxxxx
+     */
+    const LINE_URL = 'https://lin.ee/9qPKSIr';
+
+    const letters = ['A', 'B', 'C', 'D'];
+
+    // 本人向け7問
+    const selfQuestions = [
+      {
+        q: '結婚相手を考えるとき、あなたが特に大切にしたいことは？',
+        a: [
+          '価値観や条件が自分の理想に合っていること',
+          '一緒にいて安心でき、自然体でいられること',
+          '自分のことを理解し、受け入れてくれること',
+          '一緒に新しい経験を楽しみ、前向きに進めること'
+        ]
+      },
+      {
+        q: '初めて会う相手と話すとき、あなたはどんなことを意識する？',
+        a: [
+          '相手の考え方や将来の価値観を知りたい',
+          '焦らず、少しずつ相手との距離を縮めたい',
+          '自分がどう思われているか気になってしまう',
+          '自分から積極的に話しかけてみたい'
+        ]
+      },
+      {
+        q: '気になる相手ができたら、どう行動することが多い？',
+        a: [
+          '相手の人柄や将来性をじっくり見極めたい',
+          '相手のペースも大切にしながら関係を深めたい',
+          '興味はあるけれど、自分から動くのに少し不安がある',
+          '自分から連絡したり、次の約束をしたりする'
+        ]
+      },
+      {
+        q: '婚活が思うように進まないとき、どう考えそう？',
+        a: [
+          '希望条件や相手に求めるものを改めて整理する',
+          '焦らず、自分のペースで続けようと思う',
+          '自分に魅力がないのでは、と自信をなくしそう',
+          '方法を変えたり、新しい出会いを探したりする'
+        ]
+      },
+      {
+        q: '婚活を始めるなら、まず何から取り組みたい？',
+        a: [
+          '自分の理想や譲れない条件を整理する',
+          'どんな関係を築きたいか、自分の気持ちを整理する',
+          '自分の魅力や強みを見つけ、自信をつける',
+          'まずは出会いの機会を増やしてみる'
+        ]
+      },
+      {
+        q: '今の結婚に対する気持ちに一番近いものは？',
+        a: [
+          '自分に合う相手と、できるだけ早く出会いたい',
+          '焦らず、心から納得できる相手を見つけたい',
+          '結婚したい気持ちはあるけれど、何から始めればよいか不安',
+          '結婚に向けて、具体的に行動を始めたい'
+        ]
+      },
+      {
+        q: '婚活をサポートしてもらえるなら、どんな支援がうれしい？',
+        a: [
+          '希望に合う相手探しや条件整理',
+          '交際中の悩みや相手との関係づくりの相談',
+          '自分の魅力を見つけ、自信を持つためのサポート',
+          '活動計画を立て、出会いから交際まで進めるサポート'
+        ]
+      }
+    ];
+
+    // 親御さん向け5問
+    const parentQuestions = [
+      {
+        q: 'お子さまの結婚について、今のお気持ちに近いものは？',
+        a: [
+          '本人が望むなら、できる限り積極的に応援したい',
+          '本人の気持ちを尊重して、温かく見守りたい',
+          '年齢や将来のことを考えると、少し心配になる',
+          'まずは結婚について話すきっかけを作りたい'
+        ]
+      },
+      {
+        q: 'お子さまが結婚について少し話してくれたら、どうしますか？',
+        a: [
+          '具体的な情報を集めたり、できることを手伝ったりする',
+          'まずは本人の話をじっくり聞く',
+          '結婚後の生活や相手選びについて、気になることを伝える',
+          '気軽に話せる機会を作り、少しずつ話を広げる'
+        ]
+      },
+      {
+        q: 'お子さまの婚活について、特に気になることは？',
+        a: [
+          '本人に合う相手と出会えるかどうか',
+          '本人が本当に結婚したいと思っているかどうか',
+          '年齢や将来、婚活で嫌な思いをしないかどうか',
+          'どうすれば自然に結婚を意識するきっかけができるか'
+        ]
+      },
+      {
+        q: '結婚相談所について相談するとしたら、どんな形が理想ですか？',
+        a: [
+          '本人と一緒に話を聞き、具体的に検討したい',
+          '本人の意思を大切にし、必要になったら相談したい',
+          'まずは親だけで情報を聞き、不安を解消したい',
+          'まずは気軽な話から始め、本人にも伝えてみたい'
+        ]
+      },
+      {
+        q: 'お子さまの結婚に向けて、どのようなサポートができたらよいと思いますか？',
+        a: [
+          '相手探しや活動を具体的に手伝う',
+          '本人が話したいときに相談に乗る',
+          '専門家から情報を聞き、心配や疑問を解消する',
+          '本人が結婚について考えるきっかけを作る'
+        ]
+      }
+    ];
+
+    const selfResults = {
+      A: {
+        title: '理想追求タイプ',
+        catch: '妥協よりも、納得できる出会いを。',
+        description: '結婚相手に求める条件や価値観を大切にし、自分が納得できる相手と出会いたいタイプです。将来をしっかり考えているからこそ、相手選びにも真剣に向き合う傾向があります。',
+        advice: '希望条件を大切にしながらも、最初から条件だけで判断しすぎないことがポイント。実際に話してみることで、思いがけない魅力に気づくこともあります。',
+        method: 'まずは理想の結婚生活や譲れない条件を整理し、自分に合う相手像を明確にすることから始めてみましょう。'
+      },
+      B: {
+        title: 'じっくり慎重タイプ',
+        catch: '大切なのは、心から安心できる関係。',
+        description: '相手との信頼関係や安心感を大切にするタイプです。時間をかけて相手を知り、自然な関係を築いていきたいと考える傾向があります。',
+        advice: '慎重に考えることは大切ですが、相手を知る前に結論を急がないことも大切です。少しずつ会話を重ねることで、関係が深まることもあります。',
+        method: '自分のペースを尊重しながら、交際中の不安や悩みを相談できる環境で活動するのがおすすめです。'
+      },
+      C: {
+        title: '自信・準備タイプ',
+        catch: '変わりたい気持ちが、未来への第一歩。',
+        description: '結婚したい気持ちはあるものの、何から始めればよいのか分からなかったり、自分に自信が持てなかったりするタイプです。',
+        advice: '最初から完璧な状態で婚活を始める必要はありません。自分のよいところや大切にしたいことを少しずつ整理していきましょう。',
+        method: '自己分析やプロフィールづくりなど、準備段階から一緒に取り組めるサポートがおすすめです。'
+      },
+      D: {
+        title: '行動派タイプ',
+        catch: '出会いのチャンスを、未来につなげよう。',
+        description: '新しい出会いや変化に前向きで、結婚に向けて具体的に行動したいタイプです。チャンスを見つけたら、積極的に動ける傾向があります。',
+        advice: '出会いの数だけでなく、一人ひとりと向き合う時間も大切にしましょう。自分に合う相手かどうかを見極めることも重要です。',
+        method: '目標や活動計画を決め、出会いから交際まで効率よく進められる環境がおすすめです。'
+      }
+    };
+
+    const parentResults = {
+      A: {
+        title: '積極的に応援タイプ',
+        catch: 'できることから、前向きに応援したい。',
+        description: 'お子さまの幸せを願い、結婚に向けてできることを積極的にサポートしたいタイプです。',
+        advice: '応援する気持ちは大切ですが、結婚は本人の意思が何より重要です。本人の希望を確認しながら、必要なときに力になれるとよいでしょう。',
+        method: 'まずは親御さま自身が婚活の仕組みや相談所のサポート内容を知り、本人に伝えられる情報を集めてみましょう。'
+      },
+      B: {
+        title: '温かく見守るタイプ',
+        catch: '本人の気持ちを尊重し、そっと寄り添う。',
+        description: 'お子さまの人生や選択を尊重し、本人のタイミングを大切にしたいタイプです。',
+        advice: '見守ることに加えて、本人が話したくなったときに安心して相談できる雰囲気を作っておくことも大切です。',
+        method: '無理に話を進めず、日常の会話の中で結婚や将来について自然に話せる機会を作ってみましょう。'
+      },
+      C: {
+        title: '心配先回りタイプ',
+        catch: '大切だからこそ、将来が気になる。',
+        description: 'お子さまの将来や生活を真剣に考えるからこそ、年齢や出会いの機会、婚活でのトラブルなどが気になりやすいタイプです。',
+        advice: '心配をそのまま伝えると、本人がプレッシャーに感じることもあります。まずは情報を整理し、本人の気持ちを聞くことから始めてみましょう。',
+        method: '親御さまだけで専門家に相談し、婚活の仕組みやサポート内容を知ることから始めるのも一つの方法です。'
+      },
+      D: {
+        title: 'きっかけづくりタイプ',
+        catch: '自然な会話から、新しい一歩を。',
+        description: 'お子さまに結婚を意識するきっかけを作りたいと考えるタイプです。無理に話を進めるより、自然な形で関心を持ってもらいたい傾向があります。',
+        advice: '結婚の話題を切り出すときは、本人の気持ちや状況に配慮することが大切です。何気ない会話から始めてみましょう。',
+        method: '親御さまが先に情報を知っておき、本人が関心を持ったときに選択肢を伝えられるようにしておくとよいでしょう。'
+      }
+    };
+
+    let currentTarget = 'self';
+    let currentQuestions = [];
+    let currentIndex = 0;
+    let answers = [];
+
+    function showScreen(id) {
+      ['startScreen', 'quizScreen', 'resultScreen'].forEach(screenId => {
+        document.getElementById(screenId).classList.add('hidden');
+      });
+      document.getElementById(id).classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function startQuiz(target) {
+      currentTarget = target;
+      currentQuestions = target === 'self' ? selfQuestions : parentQuestions;
+      currentIndex = 0;
+      answers = [];
+      showScreen('quizScreen');
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const total = currentQuestions.length;
+      const question = currentQuestions[currentIndex];
+
+      document.getElementById('targetLabel').textContent =
+        currentTarget === 'self' ? '本人向け診断' : '親御さん向け診断';
+
+      document.getElementById('progressText').textContent =
+        `${currentIndex + 1} / ${total}`;
+
+      document.getElementById('progressBar').style.width =
+        `${((currentIndex + 1) / total) * 100}%`;
+
+      document.getElementById('questionText').textContent = question.q;
+
+      const choices = document.getElementById('choices');
+      choices.innerHTML = '';
+
+      question.a.forEach((answer, index) => {
+        const letter = letters[index];
+        const button = document.createElement('button');
+        button.className = 'choice';
+        button.innerHTML =
+          `<span class="choice-letter">${letter}</span>${answer}`;
+
+        button.addEventListener('click', () => selectAnswer(letter));
+        choices.appendChild(button);
+      });
+
+      document.getElementById('backButton').style.visibility =
+        currentIndex === 0 ? 'hidden' : 'visible';
+    }
+
+    function selectAnswer(letter) {
+      answers[currentIndex] = letter;
+
+      if (currentIndex < currentQuestions.length - 1) {
+        currentIndex++;
+        renderQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function goBack() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion();
+      }
+    }
+
+    function calculateResult() {
+      const counts = { A: 0, B: 0, C: 0, D: 0 };
+
+      answers.forEach(answer => {
+        counts[answer]++;
+      });
+
+      const maxCount = Math.max(...Object.values(counts));
+      const tiedLetters = letters.filter(letter => counts[letter] === maxCount);
+
+      // 同点の場合、最後の質問からさかのぼって該当タイプを優先
+      for (let i = answers.length - 1; i >= 0; i--) {
+        if (tiedLetters.includes(answers[i])) {
+          return answers[i];
+        }
+      }
+
+      return 'A';
+    }
+
+    function showResult() {
+      const resultType = calculateResult();
+      const results = currentTarget === 'self' ? selfResults : parentResults;
+      const result = results[resultType];
+
+      document.getElementById('resultTitle').textContent = result.title;
+      document.getElementById('resultCatchcopy').textContent = result.catch;
+      document.getElementById('resultDescription').textContent = result.description;
+      document.getElementById('resultAdvice').textContent = result.advice;
+      document.getElementById('resultMethod').textContent = result.method;
+
+      const parentNotice = document.getElementById('parentNotice');
+
+      if (currentTarget === 'parent') {
+        parentNotice.textContent =
+          'この診断は、親御さまご自身の関わり方の傾向を整理するものです。お子さまの結婚への気持ちや意思を判定するものではありません。親御さまだけでのご相談も歓迎しております。';
+        parentNotice.classList.remove('hidden');
+      } else {
+        parentNotice.classList.add('hidden');
+      }
+
+      showScreen('resultScreen');
+    }
+
+    function openConsultation() {
+      if (LINE_URL.includes('ここに公式LINEのURL')) {
+        alert('LINE公式アカウントのURLがまだ設定されていません。Code.gsではなく、Index.html内のLINE_URLを設定してください。');
+        return;
+      }
+
+      window.open(LINE_URL, '_blank');
+    }
+
+    function restartQuiz() {
+      currentIndex = 0;
+      answers = [];
+      showScreen('startScreen');
+    }
+  </script>
+</body>
+</html>
